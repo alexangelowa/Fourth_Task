@@ -5,8 +5,6 @@ using TechTalk.SpecFlow;
 using NUnit.Framework;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
-using System.Text;
-using System.Collections.Generic;
 
 namespace Fourth_Task.StepBindings
 {
@@ -17,7 +15,6 @@ namespace Fourth_Task.StepBindings
         private ChromeDriver chromeDriver;
         private string itemPrice;
         private IWebElement firstElement;
-
 
         public AmazonSearchFeatureSteps()
         {
@@ -51,7 +48,7 @@ namespace Fourth_Task.StepBindings
         public void WhenIHaveEnteredHarryPotterAndTheCursedChildAsSearchKeyword(string searchWord)
         {
             searchKeyword = searchWord;
-            var wait = new WebDriverWait(chromeDriver, TimeSpan.FromSeconds(5));
+            var wait = new WebDriverWait(chromeDriver, TimeSpan.FromSeconds(10));
             wait.Until(ExpectedConditions.ElementIsVisible(By.Id("twotabsearchtextbox")));
             var searchBox = chromeDriver.FindElement(By.Id("twotabsearchtextbox"));
             searchBox.SendKeys(searchKeyword);
@@ -68,7 +65,7 @@ namespace Fourth_Task.StepBindings
         public void ThenIShouldBeRedirectedToTheSearchResultsPage()
         {
             var wait = new WebDriverWait(chromeDriver, TimeSpan.FromSeconds(10));
-            wait.Until(ExpectedConditions.ElementIsVisible(By.Id("reviewsRefinements")));
+            wait.Until(ExpectedConditions.ElementIsVisible(By.Id("search")));
             Assert.IsTrue(chromeDriver.Url.Contains("Child"));
             Assert.IsTrue(chromeDriver.Title.Contains(searchKeyword));
         }
@@ -76,10 +73,9 @@ namespace Fourth_Task.StepBindings
         [Then(@"I verify that the first item has the title: Harry Potter and the Cursed Child - Parts One & Two")]
         public void ThenIVerifyThatTheFirstItemsHasTheTitleHarryPotterAndTheCursedChild_PartsOneTwo()
         {
-            var listOfAllItems = chromeDriver.FindElements(By.XPath("//*[@id=\"search\"]/div[1]/div[1]/div/span[3]/div[2]"));
-            firstElement = listOfAllItems[0];
-            var titleText = firstElement.FindElement(By.XPath("//*[@id=\"search\"]/div[1]/div[1]/div/span[3]/div[2]/div[1]/div/span/div/div/div[2]/div[2]/div/div/div[1]/h2/a/span"));
-
+            firstElement = chromeDriver.FindElement(By.CssSelector(".s-search-results:nth-of-type(2) .s-result-item:first-of-type"));
+            var titleText = firstElement.FindElement(By.CssSelector(".a-size-medium"));
+           
             Assert.IsTrue(titleText.Text.Contains(searchKeyword));
         }
 
@@ -94,7 +90,7 @@ namespace Fourth_Task.StepBindings
         [Then(@"I verify the selected type")]
         public void ThenIVerifyTheSelectedType()
         {
-            var itemType = firstElement.FindElement(By.XPath("//*[@id=\"search\"]/div[1]/div[1]/div/span[3]/div[2]/div[1]/div/span/div/div/div[2]/div[2]/div/div/div[3]/div[1]/div/div[1]/div[1]/a"));
+            var itemType = firstElement.FindElement(By.CssSelector(".s-search-results:nth-of-type(2) [data-cel-widget=\"search_result_0\"] .a-spacing-top-small .a-text-bold"));
 
             Assert.IsTrue(itemType.Text.Contains("Paperback"));
         }
@@ -103,7 +99,7 @@ namespace Fourth_Task.StepBindings
         public void ThenIVerifyThePriceIs(string price)
         {
             this.itemPrice = price;
-            var itemPrice = firstElement.FindElement(By.ClassName("a-offscreen"));
+            var itemPrice = chromeDriver.FindElement(By.CssSelector("[data-cel-widget=\"search_result_0\"] .a-spacing-top-small [data-a-size=\"l\"] .a-offscreen"));
 
             Assert.IsTrue(itemPrice.GetAttribute("innerHTML").Equals(this.itemPrice));
         }
@@ -111,7 +107,7 @@ namespace Fourth_Task.StepBindings
         [When(@"I click the link to the book details")]
         public void WhenIClickTheLinkToTheBookDetails()
         {
-            var itemDetailsPageLink = chromeDriver.FindElement(By.XPath("//*[@id=\"search\"]/div[1]/div[1]/div/span[3]/div[2]/div[1]/div/span/div/div/div[2]/div[2]/div/div/div[1]/h2/a"));
+            var itemDetailsPageLink = chromeDriver.FindElement(By.CssSelector(".s-search-results:nth-of-type(2) [data-cel-widget=\"search_result_0\"] .a-size-medium.a-color-base.a-text-normal"));
             itemDetailsPageLink.Click();
         }
 
@@ -135,7 +131,7 @@ namespace Fourth_Task.StepBindings
         [Then(@"I verify the badge if there is any")]
         public void ThenIVerifyTheBadgeIfThereIsAny()
         {
-            var itemBadge = chromeDriver.FindElement(By.XPath("//*[@id=\"zeitgeistBadge_feature_div\"]/div/a/i"));
+            var itemBadge = chromeDriver.FindElement(By.CssSelector(".a-icon-addon.p13n-best-seller-badge"));
 
             Assert.IsTrue(itemBadge.Text.Equals("#1 Best Seller"));
         }
@@ -168,7 +164,7 @@ namespace Fourth_Task.StepBindings
         public void ThenIAmRedirectedToTheSuccessfullyAddedToCartScreen()
         {
             var wait = new WebDriverWait(chromeDriver, TimeSpan.FromSeconds(10));
-            wait.Until(ExpectedConditions.ElementIsVisible(By.Id("hlb-ptc-btn-native")));
+            wait.Until(ExpectedConditions.ElementIsVisible(By.Id("huc-v2-order-row-with-divider")));
 
             Assert.IsTrue(chromeDriver.Title.Contains("Shopping Basket"));
         }
@@ -184,7 +180,7 @@ namespace Fourth_Task.StepBindings
         [Then(@"I verify that the Added to Basket text is shown")]
         public void ThenIVerifyThatTheAddedToBasketTextIsShown()
         {
-            var confirmationAddedToBasket = chromeDriver.FindElement(By.XPath("//*[@id=\"huc-v2-order-row-confirm-text\"]/h1"));
+            var confirmationAddedToBasket = chromeDriver.FindElement(By.CssSelector("#huc-v2-order-row-confirm-text .a-size-medium"));
 
             Assert.IsTrue(confirmationAddedToBasket.Text.Equals("Added to Basket"));
         }
@@ -192,7 +188,7 @@ namespace Fourth_Task.StepBindings
         [Then(@"I check the quantity of the cart is one")]
         public void ThenICheckTheQuantityOfTheCartIsOne()
         {
-            var quantityInBasket = chromeDriver.FindElement(By.XPath("//*[@id=\"hlb-subcart\"]/div[1]/span/span[1]"));
+            var quantityInBasket = chromeDriver.FindElement(By.CssSelector("#hlb-subcart"));
 
             Assert.IsTrue(quantityInBasket.GetAttribute("innerHTML").Contains(" (1 item): "));
         }
@@ -215,8 +211,7 @@ namespace Fourth_Task.StepBindings
         [Then(@"I verify that the book is shown on the list")]
         public void ThenIVerifyThatTheBookIsShownOnTheList()
         {
-            var listOfAllItemsInBasket = chromeDriver.FindElements(By.XPath("//*[@id=\"activeCartViewForm\"]/div[2]"));
-            var firstItemInBasket = listOfAllItemsInBasket[0];
+            var firstItemInBasket = chromeDriver.FindElement(By.CssSelector("[data-item-count=\"1\"]"));
 
             Assert.IsTrue(firstItemInBasket.Text.Contains(searchKeyword));
         }
