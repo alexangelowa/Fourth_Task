@@ -205,7 +205,7 @@ namespace Fourth_Task.StepBindings
         public void ThenIShouldBeRedirectedToTheCartScreen()
         {
             var wait = new WebDriverWait(chromeDriver, TimeSpan.FromSeconds(10));
-            wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector(".sc-item-content-group:nth-of-type(1) .sc-product-image")));
+            wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[data-item-count=\"1\"] .sc-product-image")));
         }
 
         [Then(@"I verify that the book is shown on the list")]
@@ -219,11 +219,11 @@ namespace Fourth_Task.StepBindings
         [Then(@"I verify that the title, type of print and price are the same as on the search page, quantity is (.*) and total price is same as item price")]
         public void ThenIVerifyThatTheTitleTypeOfPrintAndPriceAreTheSameAsOnTheSearchPageQuantityIsAndTotalPrice(int quantity)
         {
-            var itemTitle = chromeDriver.FindElement(By.CssSelector(".sc-item-content-group:nth-of-type(2) .a-truncate-full"));
-            var itemType = chromeDriver.FindElement(By.CssSelector(".sc-item-content-group:nth-of-type(2) .sc-product-binding"));
-            var itemPrice = chromeDriver.FindElement(By.CssSelector(".sc-item-content-group:nth-of-type(2) .sc-product-price"));
-            var itemQuantity = chromeDriver.FindElement(By.CssSelector(".sc-item-content-group:nth-of-type(2) .a-dropdown-prompt"));
-            var totalPrice = chromeDriver.FindElement(By.CssSelector(".sc-item-content-group:nth-of-type(2) .sc-price"));
+            var itemTitle = chromeDriver.FindElement(By.CssSelector("[data-item-count=\"1\"] .a-truncate-full"));
+            var itemType = chromeDriver.FindElement(By.CssSelector("[data-item-count=\"1\"] .sc-product-binding"));
+            var itemPrice = chromeDriver.FindElement(By.CssSelector("[data-item-count=\"1\"] .sc-product-price"));
+            var itemQuantity = chromeDriver.FindElement(By.CssSelector("[data-item-count=\"1\"] .a-dropdown-prompt"));
+            var totalPrice = chromeDriver.FindElement(By.CssSelector("[data-item-count=\"1\"] .sc-price"));
 
             string titleText = itemTitle.GetAttribute("innerHTML");
             string itemTypeText = itemType.GetAttribute("innerHTML");
