@@ -29,7 +29,7 @@ Scenario: Search for a book in Amazon and add it to Cart
 	When I click on Edit basket button
 	Then I should be redirected to the cart screen
 	And I verify that the book is shown on the list
-	And I verify that the title, type of print is the same as on the search page, price is the same as on the search page, quantity is 1 and total price is same as item price
+	And I verify that the title, type of print and price are the same as on the search page, quantity is 1 and total price is same as item price
 
 
 

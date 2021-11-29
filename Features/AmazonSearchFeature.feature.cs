@@ -177,9 +177,8 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.And("I verify that the book is shown on the list", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 32
- testRunner.And("I verify that the title, type of print is the same as on the search page, price i" +
-                        "s the same as on the search page, quantity is 1 and total price is same as item " +
-                        "price", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("I verify that the title, type of print and price are the same as on the search pa" +
+                        "ge, quantity is 1 and total price is same as item price", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();

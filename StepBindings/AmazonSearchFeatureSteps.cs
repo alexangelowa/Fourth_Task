@@ -209,7 +209,7 @@ namespace Fourth_Task.StepBindings
         public void ThenIShouldBeRedirectedToTheCartScreen()
         {
             var wait = new WebDriverWait(chromeDriver, TimeSpan.FromSeconds(10));
-            wait.Until(ExpectedConditions.ElementIsVisible(By.Name("proceedToRetailCheckout")));
+            wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector(".sc-item-content-group:nth-of-type(1) .sc-product-image")));
         }
 
         [Then(@"I verify that the book is shown on the list")]
@@ -221,20 +221,26 @@ namespace Fourth_Task.StepBindings
             Assert.IsTrue(firstItemInBasket.Text.Contains(searchKeyword));
         }
 
-        [Then(@"I verify that the title, type of print is the same as on the search page, price is the same as on the search page, quantity is (.*) and total price is same as item price")]
-        public void ThenIVerifyThatTheTitleTypeOfPrintIsTheSameAsOnTheSearchPagePriceIsTheSameAsOnTheSearchPageQuantityIsAndTotalPrice(int quantity)
+        [Then(@"I verify that the title, type of print and price are the same as on the search page, quantity is (.*) and total price is same as item price")]
+        public void ThenIVerifyThatTheTitleTypeOfPrintAndPriceAreTheSameAsOnTheSearchPageQuantityIsAndTotalPrice(int quantity)
         {
-            var itemTitle = chromeDriver.FindElement(By.XPath($"//span[contains(text(), 'Harry Potter and the Cursed Child - Parts One and Two')]"));
-            //var itemType = chromeDriver.FindElement(By.XPath("//span[contains(text(), 'Paperback')]"))
+            var itemTitle = chromeDriver.FindElement(By.CssSelector(".sc-item-content-group:nth-of-type(2) .a-truncate-full"));
+            var itemType = chromeDriver.FindElement(By.CssSelector(".sc-item-content-group:nth-of-type(2) .sc-product-binding"));
+            var itemPrice = chromeDriver.FindElement(By.CssSelector(".sc-item-content-group:nth-of-type(2) .sc-product-price"));
+            var itemQuantity = chromeDriver.FindElement(By.CssSelector(".sc-item-content-group:nth-of-type(2) .a-dropdown-prompt"));
+            var totalPrice = chromeDriver.FindElement(By.CssSelector(".sc-item-content-group:nth-of-type(2) .sc-price"));
 
+            string titleText = itemTitle.GetAttribute("innerHTML");
+            string itemTypeText = itemType.GetAttribute("innerHTML");
+            string itemPriceText = itemPrice.GetAttribute("innerHTML");
+            string itemQuantityText = itemQuantity.GetAttribute("innerHTML");
+            string totalPriceText = totalPrice.GetAttribute("innerHTML");
 
-            Assert.IsTrue(itemTitle.GetAttribute("innerHTML").Contains(searchKeyword));
-
-            //Assert.IsTrue(itemType.GetAttribute("innerHTML").Equals("Paperback"));
-            //Assert.IsTrue(itemPrice.GetAttribute("innerHTML").Equals(this.itemPrice));
-            //Assert.IsTrue(itemQuantity.GetAttribute("innerHTML").Equals(quantity));
-            //Assert.IsTrue(totalPrice.GetAttribute("innerHTML").Equals(this.itemPrice));
-
+            Assert.IsTrue(titleText.Contains(searchKeyword));
+            Assert.IsTrue(itemTypeText.Contains("Paperback"));
+            Assert.IsTrue(itemPriceText.Equals(this.itemPrice));
+            Assert.IsTrue(itemQuantityText.Equals(quantity.ToString()));
+            Assert.IsTrue(totalPriceText.Equals(this.itemPrice));
         }
     }
 }
