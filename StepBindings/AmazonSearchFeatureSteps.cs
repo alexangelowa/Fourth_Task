@@ -164,7 +164,7 @@ namespace Fourth_Task.StepBindings
         public void ThenIAmRedirectedToTheSuccessfullyAddedToCartScreen()
         {
             var wait = new WebDriverWait(chromeDriver, TimeSpan.FromSeconds(10));
-            wait.Until(ExpectedConditions.ElementIsVisible(By.Id("huc-v2-order-row-with-divider")));
+            wait.Until(ExpectedConditions.ElementIsVisible(By.Id("sw-atc-details-single-container")));
 
             Assert.IsTrue(chromeDriver.Title.Contains("Shopping Basket"));
         }
@@ -172,7 +172,7 @@ namespace Fourth_Task.StepBindings
         [Then(@"I verify that the notification for successfully adding the item is shown")]
         public void ThenIVerifyThatTheNotificationForSuccessfullyAddingTheItemIsShown()
         {
-            var notificationComponent = chromeDriver.FindElement(By.Id("huc-v2-order-row-with-divider"));
+            var notificationComponent = chromeDriver.FindElement(By.ClassName("sw-atc-message-section"));
 
             Assert.IsTrue(notificationComponent.Displayed);
         }
@@ -180,7 +180,7 @@ namespace Fourth_Task.StepBindings
         [Then(@"I verify that the Added to Basket text is shown")]
         public void ThenIVerifyThatTheAddedToBasketTextIsShown()
         {
-            var confirmationAddedToBasket = chromeDriver.FindElement(By.CssSelector("#huc-v2-order-row-confirm-text .a-size-medium"));
+            var confirmationAddedToBasket = chromeDriver.FindElement(By.ClassName("sw-atc-message-section"));
 
             Assert.IsTrue(confirmationAddedToBasket.Text.Equals("Added to Basket"));
         }
@@ -188,15 +188,15 @@ namespace Fourth_Task.StepBindings
         [Then(@"I check the quantity of the cart is one")]
         public void ThenICheckTheQuantityOfTheCartIsOne()
         {
-            var quantityInBasket = chromeDriver.FindElement(By.CssSelector("#hlb-subcart"));
+            var quantityInBasket = chromeDriver.FindElement(By.Id("nav-cart-count-container"));
 
-            Assert.IsTrue(quantityInBasket.GetAttribute("innerHTML").Contains(" (1 item): "));
+            Assert.IsTrue(quantityInBasket.Text.Contains("1"));
         }
 
         [When(@"I click on Edit basket button")]
         public void WhenIClickOnEditBasketButton()
         {
-            var editBasketLink = chromeDriver.FindElement(By.Id("hlb-view-cart-announce"));
+            var editBasketLink = chromeDriver.FindElement(By.Id("nav-cart"));
 
             editBasketLink.Click();
         }
